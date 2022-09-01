@@ -22,21 +22,34 @@ using namespace std;
 //     }
 // };
 //solution 2 leverage the array to find the intersection of two arrays
+// class Solution {
+// public:
+//     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+//         vector<int> res;
+//         int hash[1000] = {0};
+//         for (auto num : nums1) {
+//             hash[num]++;
+//         }
+//         for (auto num : nums2) {
+//             if (hash[num]) {
+//                 res.push_back(num);
+//                 hash[num] = 0;
+//             }
+//         }
+//         return res;
+//     }
+// };
 class Solution {
 public:
     vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> res;
-        int hash[1000] = {0};
-        for (auto num : nums1) {
-            hash[num]++;
-        }
+        unordered_set<int> res;
+        unordered_set<int> s1(nums1.begin(), nums1.end());
         for (auto num : nums2) {
-            if (hash[num]) {
-                res.push_back(num);
-                hash[num] = 0;
+            if (s1.find(num) != s1.end()) {
+                res.insert(num);
             }
         }
-        return res;
+        return vector<int>(res.begin(), res.end());
     }
 };
 int main()
