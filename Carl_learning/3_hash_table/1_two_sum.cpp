@@ -29,7 +29,20 @@ using namespace std;
 // };
 class Solution {
 public:
-    vector<int> twoSum()
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> res;
+        unordered_map<int, int> hash;
+        for (int i = 0; i < nums.size(); ++i) {
+            int diff = target - nums[i];
+            if (hash.count(diff)) {
+                res.push_back(hash[diff]);
+                res.push_back(i);
+                break;
+            }
+            hash[nums[i]] = i;
+        }
+        return res;
+    }
 };
 int main()
 {
