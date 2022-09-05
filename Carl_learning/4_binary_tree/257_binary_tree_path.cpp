@@ -27,7 +27,7 @@ private:
         }
         path += "->";
         dfs(root->left, path);
-        dfs(root->right, path);
+        dfs(root->left, path);// a rookie mistake should be dfs(root->right, path)
     }
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
