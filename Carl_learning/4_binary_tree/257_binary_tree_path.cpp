@@ -16,22 +16,23 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 class Solution {
-private:
-    vector<string> res;
-    void dfs(TreeNode* root, string path) {
-        if (root == nullptr) return;
-        path += to_string(root->val);
-        if (root->left == nullptr && root->right == nullptr) {
-            res.push_back(path);
-            return;
-        }
-        path += "->";
-        dfs(root->left, path);
-        dfs(root->left, path);// a rookie mistake should be dfs(root->right, path)
-    }
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
-        dfs(root, "");
+        vector<string> res;
+        if (root == nullptr) return res;
+        string path = to_string(root->val);
+        if (!root->left && !root->right) {
+            res.push_back(path);
+            return res;
+        }
+        vector<string> left = binaryTreePaths(root->left);
+        vector<string> right = binaryTreePaths(root->right);
+        for (auto l : left) {
+            res.push_back(path + "->" + l);
+        }
+        for (auto r : right) {
+            res.push_back(path + "->" + r);
+        }
         return res;
     }
 };
