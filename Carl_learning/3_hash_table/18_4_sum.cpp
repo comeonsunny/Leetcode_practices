@@ -14,60 +14,45 @@ class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
         vector<vector<int>> res;
-        sort(nums.begin(), nums.end());
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums[i] > target && nums[i] > 0 && target > 0) {
-                break;
+        for (int i = 0; i < nums.size(); ++i) {
+            long _target = target - nums[i];
+            vector<vector<int>> _res = threeSum(nums, _target, i);
+            for (auto v : _res) {
+                v.insert(v.begin(), nums[i]);
+                res.push_back(v);
             }
-            if (i > 0 && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            vector<vector<int>> _res = threeSum(nums, i + 1, (long)target - nums[i]);
-            for (int j = 0; j < _res.size(); j++) {
-               _res[j].insert(_res[j].begin(), nums[i]);
-                res.push_back(_res[j]);
-            }
+            while (i + 1 < nums.size() && nums[i] == nums[i + 1]) ++i;
         }
-        return res;
     }
 private:
-    vector<vector<int>> threeSum(vector<int>& nums, int start, long target) {
+    vector<vector<int>> threeSum(vector<int>& nums, int target, int index) {
         vector<vector<int>> res;
-        for (int i = start; i < nums.size(); i++) {
-            if (nums[i] > target && nums[i] > 0 && target > 0) {
-                break;
-            }
-            if (i > start && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            vector<vector<int>> _res = twoSum(nums, i + 1, (long)target - nums[i]);
-            for (int j = 0; j < _res.size(); j++) {
-                _res[j].insert(_res[j].begin(), nums[i]);
-                res.push_back(_res[j]);
+        for (int i = index + 1; i < nums.size(); ++i) {
+            long _target = target - nums[i];
+            if (i > index + 1 && nums[i] == nums[i - 1]) continue;
+            vector<vector<int>> _res = twoSum(nums, _target, i);
+            for (auto v : _res) {
+                v.insert(v.begin(), nums[i]);
+                res.push_back(v);
             }
         }
         return res;
     }
-    vector<vector<int>> twoSum(vector<int>& nums, int start, long target) {
+    vector<vector<int>> twoSum(vector<int>& nums, int target, int index) {
         vector<vector<int>> res;
-        int left = start;
+        int left = index + 1;
         int right = nums.size() - 1;
         while (left < right) {
-            long sum = (long)nums[left] + nums[right];
-            if (sum == target) {
+            if (nums[left] + nums[right] == target) {
                 res.push_back({nums[left], nums[right]});
-                while (left < right && nums[left] == nums[left + 1]) {
-                    left++;
-                }
-                while (left < right && nums[right] == nums[right - 1]) {
-                    right--;
-                }
-                left++;
-                right--;
-            } else if (sum < target) {
-                left++;
+                while (left < right && nums[left] == nums[left + 1]) ++left;
+                while (left < right && nums[right] == nums[right - 1]) --right;
+                ++left;
+                --right;
+            } else if (nums[left] + nums[right] < target) {
+                ++left;
             } else {
-                right--;
+                --right;
             }
         }
         return res;
