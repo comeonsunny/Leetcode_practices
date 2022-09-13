@@ -13,23 +13,10 @@ class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
         int n = s.size();
-        // brute force
-        for (int i = 1; i <= n / 2; ++i) {
-            // get the substring
-            string sub = s.substr(0, i);
-            // check if it is repeated
-            int j = i;
-            while (j + i <= n) {
-                if (s.substr(j, i) != sub) {
-                    break;
-                }
-                j += i;
-            }
-            if (j == n) {
-                return true;
-            }
-        }
-        return false;
+        // shift match
+        string ss = s + s;
+        ss = ss.substr(1, 2 * n - 2);
+        return ss.find(s) != string::npos;
     }
 };
 int main() {
@@ -37,4 +24,4 @@ int main() {
     string s = "abab";
     cout << sol.repeatedSubstringPattern(s) << endl;
     return 0;
-}
+} 
