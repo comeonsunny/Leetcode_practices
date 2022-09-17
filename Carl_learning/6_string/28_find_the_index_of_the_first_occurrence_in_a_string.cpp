@@ -6,23 +6,36 @@
 */
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 class Solution {
 public:
     int strStr(string haystack, string needle) {
-        // brute force algorithm
-        // time complexity: O((n-m+1)*m)
-        // space complexity: O(1)
+        // KMP algorithm
         int n = haystack.size();
         int m = needle.size();
-        for (int i = 0; i < n - m + 1; i++) {
-            int j = 0; 
-            for (; j < m; j++) {
-                if (haystack[i +j] != needle[j]) {
-                    break;
-                }
+        vector<int> next(m, 0);
+        // calculate next array
+        for (int i = 1, j = 0; i < m; i++) {
+            while (j > 0 && needle[i] != needle[j]) {
+                j = next[j - 1];
             }
-            if (j == m) return i;
+            if (needle[i] == needle[j]) {
+                j++;
+            }
+            next[i] = j;
+        }
+        // find the first occurrence
+        for (int i = 0, j = 0; i < n; i++) {
+            while (j > 0 && haystack[i] != needle[j]) {
+                j = next[j - 1];
+            }
+            if (haystack[i] == needle[j]) {
+                j++;
+            }
+            if (j == m) {
+                return i - m + 1;
+            }
         }
         return -1;
     }
