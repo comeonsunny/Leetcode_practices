@@ -13,10 +13,18 @@ class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
         int n = s.size();
-        // shift match
-        string ss = s + s;
-        ss = ss.substr(1, 2 * n - 2);
-        return ss.find(s) != string::npos;
+        // kmp algorithm
+        vector<int> next(n, 0);
+        for (int i = 1, j = 0; i < n; i++) {
+            while (j > 0 && s[i] != s[j]) {
+                j = next[j - 1];
+            }
+            if (s[i] == s[j]) {
+                j++;
+            }
+            next[i] = j;
+        }
+        return next[n - 1] && n % (n - next[n - 1]) == 0;
     }
 };
 int main() {
