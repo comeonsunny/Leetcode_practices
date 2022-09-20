@@ -13,21 +13,61 @@
     Depending on your language, the queue may not be supported natively.
     You may simulate a queue using a list or deque (double-ended queue), as long as you use only a queue's standard operations.
 */
+#include <iostream>
+#include <queue>
+using namespace std;
 class MyStack {
+private:
+    queue<int> q1;
+    queue<int> q2;
 public:
     MyStack() {
 
     }
     void push(int x) {
-
+        q1.push(x);
     }
     int pop() {
-
+        while (q1.size() > 1) {
+            q2.push(q1.front());
+            q1.pop();
+        }
+        int res = q1.front();
+        q1.pop();
+        while (!q2.empty()) {
+            q1.push(q2.front());
+            q2.pop();
+        }
+        return res;
     }
     int top() {
-
+        while (q1.size() > 1) {
+            q2.push(q1.front());
+            q1.pop();
+        } 
+        int res = q1.front();
+        q2.push(res);
+        q1.pop();
+        while (!q2.empty()) {
+            q1.push(q2.front());
+            q2.pop();
+        }
+        return res;
     }
     bool empty() {
-
+        return q1.empty();
     }
 };
+
+int main() 
+{
+    MyStack st;
+    st.push(1);
+    st.push(2);
+    st.push(3);
+    cout << st.top() << endl;
+    cout << st.pop() << endl;
+    cout << st.pop() << endl;
+    cout << st.pop() << endl;
+    return 0;
+}
