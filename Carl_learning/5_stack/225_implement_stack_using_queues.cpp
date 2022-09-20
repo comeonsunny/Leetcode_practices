@@ -18,44 +18,52 @@
 using namespace std;
 class MyStack {
 private:
-    queue<int> q1;
-    queue<int> q2;
+    queue<int> q;
 public:
     MyStack() {
 
     }
+    
     void push(int x) {
-        q1.push(x);
+        q.push(x);
     }
+    
     int pop() {
-        while (q1.size() > 1) {
-            q2.push(q1.front());
-            q1.pop();
+        int n = q.size();
+        int res;
+        if (n == 1) {
+            res = q.front();
+            q.pop();
+            return res;
         }
-        int res = q1.front();
-        q1.pop();
-        while (!q2.empty()) {
-            q1.push(q2.front());
-            q2.pop();
+        for (int i = 0; i < n - 1; ++i) {
+            q.push(q.front());
+            q.pop();
         }
+        res = q.front();
+        q.pop();
         return res;
     }
+    
     int top() {
-        while (q1.size() > 1) {
-            q2.push(q1.front());
-            q1.pop();
-        } 
-        int res = q1.front();
-        q2.push(res);
-        q1.pop();
-        while (!q2.empty()) {
-            q1.push(q2.front());
-            q2.pop();
+        int n = q.size();
+        int res;
+        if (n == 1) {
+            res = q.front();
+            return res;
         }
+        for (int i = 0; i < n - 1; ++i) {
+            q.push(q.front());
+            q.pop();
+        }
+        res = q.front();
+        q.pop();
+        q.push(res);
         return res;
     }
+    
     bool empty() {
-        return q1.empty();
+        return q.empty();
     }
 };
 
