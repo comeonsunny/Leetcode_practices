@@ -15,9 +15,12 @@ using namespace std;
 class Solution {
 public:
     int evalRPN(vector<string>& tokens) {
+        int res;
         stack<int> st;
         for (auto token : tokens) {
-            if (token == "+" || token == "-" || token == "*" || token == "/") {
+            if (isdigit(token.back())) {
+                st.push(stoi(token));
+            } else {
                 int num1 = st.top();
                 st.pop();
                 int num2 = st.top();
@@ -36,20 +39,16 @@ public:
                         st.push(num2 / num1);
                         break;
                 }
-            } else {
-                // cout << stoi(token) << endl;
-                st.push(stoi(token));
             }
         }
-        int res = st.top();
-        st.pop();
-        return res;
+        return st.top();
     }
 };
 int main() 
 {
     Solution sol;
-    vector<string> tokens = {"2", "1", "+", "13", "*"};
+    //["2","1","+","3","*"]
+    vector<string> tokens = {"2","1","+","3","*"};
     cout << sol.evalRPN(tokens) << endl;
     return 0;
 }
