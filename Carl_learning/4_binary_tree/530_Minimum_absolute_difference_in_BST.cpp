@@ -15,22 +15,42 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
+// class Solution {
+// public:
+//     int getMinimumDifference(TreeNode* root) {
+//         inorder(root);
+//         for (int i = 1; i < this->arr.size(); ++i) {
+//             this->res = min(res, arr[i] - arr[i - 1]);
+//         }
+//         return res;
+//     }
+// private:
+//     vector<int> arr;
+//     int res = INT_MAX;
+//     void inorder(TreeNode* root) {
+//         if (!root) return;
+//         inorder(root->left);
+//         arr.push_back(root->val);
+//         inorder(root->right);
+//     }
+// };
 class Solution {
 public:
     int getMinimumDifference(TreeNode* root) {
         inorder(root);
-        for (int i = 1; i < this->arr.size(); ++i) {
-            this->res = min(res, arr[i] - arr[i - 1]);
-        }
         return res;
     }
 private:
-    vector<int> arr;
+    int pre = -1;
     int res = INT_MAX;
     void inorder(TreeNode* root) {
         if (!root) return;
         inorder(root->left);
-        arr.push_back(root->val);
+        if (pre == -1) pre = root->val;
+        else {
+            res = min(res, root->val -pre);
+            pre = root->val;
+        }
         inorder(root->right);
     }
 };
