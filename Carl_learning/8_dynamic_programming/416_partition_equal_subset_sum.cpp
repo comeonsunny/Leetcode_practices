@@ -16,13 +16,18 @@ public:
         int sum = accumulate(nums.begin(), nums.end(), 0);
         if (sum % 2 != 0) return false;
         int target = sum / 2;
-        vector<int> dp(target + 1, 0);
-        for (int i = 1; i < nums.size(); ++i) {
-            for (int j = target; j >= nums[i]; --j) {
-                dp[j] = max(dp[j], dp[j - nums[i]] + nums[i]);
-            }
+        // leverage the backtracking method
+        return backtracking(nums, target, 0, 0);
+    }
+    bool backtracking(vector<int>& nums, int target, int start, int cur_sum) {
+        if (cur_sum == target) return true;
+        if (cur_sum > target) return false;
+        for (int i = start; i < nums.size(); ++i) {
+            cur_sum += nums[i];
+            if (backtracking(nums, target, i + 1, cur_sum)) return true;
+            cur_sum -= nums[i];
         }
-        return dp[target] == target;
+        return false;
     }
 };
 int canPartition_test() {
